@@ -90,13 +90,13 @@ void moveto_mm(long step_mm)
 
 void disable_stepper(int motor)
 {
-  if motor
-    == 1
+  if (motor
+    == 1)
     {
       stepper_R.disableOutputs();
     }
-  else if motor
-    == 0
+  else if (motor
+    == 0)
     {
       stepper_H.disableOutputs();
     }
@@ -104,13 +104,13 @@ void disable_stepper(int motor)
 
 void enable_stepper(int motor)
 {
-  if motor
-    == 1
+  if (motor
+    == 1)
     {
       stepper_R.enableOutputs();
     }
-  else if motor
-    == 0
+  else if (motor
+    == 0)
     {
       stepper_H.enableOutputs();
     }
