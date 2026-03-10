@@ -13,6 +13,11 @@
 #define DIR_R_PIN 9
 #define LIMIT_INDEX 32
 
+// Pump control
+#define EN_R_PIN 16
+#define STEP_P_PIN 14 
+#define DIR_P_PIN 15
+
 // Enconder Rotational
 #define A_PULSE 2
 #define B_PULSE 3
@@ -44,7 +49,7 @@ int check_home_R = 0;
 int step_index = 0;
 int rotation_speed = 256;
 int H_speed = 256;
-
+int motor_id = 0; // 0 for height, 1 for rotation
 float pulse_to_mm = pitch_mm * microstep;
 float pulse_to_deg = 360.0 / (400 * 10 * 1.3); // considering gear and pulley reductor
 float encoder_pulse_to_deg = 360.0 / (0.5*1000.0);
@@ -244,7 +249,7 @@ void loop()
       // Serial.println(stepper_H.currentPosition());
     }
 
-    if (inputString.substring(0, 10) == "next_index")
+    if (inputString.substring(0, 10) == "Next_index")
     {
       if (check_clearence())
       {
@@ -253,14 +258,14 @@ void loop()
       }
     }
 
-    if (inputString.substring(0, 12) == "DIS_Stepper_")
+    if (inputString.substring(0, 3) == "DIS")
     {
-      int motor = inputString.substring(12, 13).toInt();
+      motor_id = inputString.substring(3, 4).toInt();
       disable_stepper(motor);
     }
-    if (inputString.substring(0, 11) == "EN_Stepper_")
+    if (inputString.substring(0, 3) == "ENA")
     {
-      int motor = inputString.substring(11, 12).toInt();
+      motor_id = inputString.substring(3, 4).toInt();
       enable_stepper(motor);
     }
     // clear the string:

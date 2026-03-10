@@ -81,20 +81,19 @@ class StepperController(QWidget):
         layout.addWidget(abs_group)
 
         # ===== Actual Index =====
-        self.index_label = QLabel("Actual Index: 0")
-        self.index_label.setAlignment(Qt.AlignCenter)
-        layout.addWidget(self.index_label)
+        #self.index_label = QLabel("Actual Index:")
+        #self.index_label.setAlignment(Qt.AlignCenter)
+        #layout.addWidget(self.index_label)
         # ===== Index Move =====
         index_group = QGroupBox("Index Move")
         index_layout = QHBoxLayout()
 
-        self.target_index = QSpinBox()
-        self.target_index.setRange(0, 5)
-        self.target_index.setSuffix(" index")
-        self.index_btn = QPushButton("Move to Index")
-        self.index_btn.clicked.connect(
-            lambda: self.index(self.target_index.value()))
-        index_layout.addWidget(self.target_index)
+        #self.target_index = QSpinBox()
+        #self.target_index.setRange(0, 5)
+        #self.target_index.setSuffix(" index")
+        self.index_btn = QPushButton("Move to next Index")
+        self.index_btn.clicked.connect(self.index)
+        # index_layout.addWidget(self.target_index)
         index_layout.addWidget(self.index_btn)
         index_group.setLayout(index_layout)
         layout.addWidget(index_group)
@@ -148,11 +147,9 @@ class StepperController(QWidget):
             actual_time = time.time()
 
             for i in range(len(preset["positions"])):
-                index_number = preset["indexes"][i]
                 position = preset["positions"][i]
                 self.target_spin.setValue(position)
-                self.target_index.setValue(index_number)
-                self.index(index_number)
+                self.index()
                 self.move_absolute()
                 # Wait for movement to complete
                 while time.time() - actual_time < 10:
@@ -207,9 +204,9 @@ class StepperController(QWidget):
         if self.serial and self.serial.is_open:
             self.serial.write((cmd + "\n").encode())
 
-    def index(self, index_number):
-        self.send(f"index_n{index_number}")
-        self.status_label.setText(f"Moving to index {index_number}")
+    def index(self):
+        self.send("Next_index")
+        self.status_label.setText(f"Moving to next index")
     # ---------------- Styling ----------------
 
     def style_limit(self, label, active):
