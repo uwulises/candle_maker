@@ -115,6 +115,7 @@ void homeStepper_R()
       check_home_R++;
     }
   }
+  step_index = 0;
   stepper_R.setCurrentPosition(0);
   encoder_R.write(0); // Reset encoder count to 0
   actual_pos_index = stepper_R.currentPosition() * pulse_to_deg;

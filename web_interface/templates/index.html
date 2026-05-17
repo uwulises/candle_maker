@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Candle Maker</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Candle Maker</h1>
+
+    <div class="card">
+        <h2>Serial Connection</h2>
+
+        <select id="port">
+            {% for port in ports %}
+            <option value="{{ port }}">{{ port }}</option>
+            {% endfor %}
+        </select>
+
+        <button onclick="connectSerial()">Connect</button>
+    </div>
+
+    <div class="card">
+        <h2>Controls</h2>
+
+        <button onclick="homeMotor()">Home</button>
+
+        <div class="move-box">
+            <input type="number" id="target" value="0">
+            <button onclick="moveAbsolute()">Move Absolute</button>
+        </div>
+
+        <button onclick="nextIndex()">Next Index</button>
+    </div>
+
+    <div class="card">
+        <h2>Presets</h2>
+
+        <select id="preset">
+            {% for p in presets %}
+            <option value="{{ p }}">{{ p }}</option>
+            {% endfor %}
+        </select>
+
+        <button onclick="runPreset()">Run Preset</button>
+    </div>
+
+    <div class="status">
+        Status:
+        <span id="statusText">Idle</span>
+    </div>
+
+</div>
+
+<script>
+
+async function connectSerial() {
+
+    const port = document.getElementById("port").value
+
+    const form = new FormData()
+    form.append("port", port)
+
+    await fetch("/connect", {
+        method: "POST",
+        body: form
+    })
+}
+
+async function homeMotor() {
+
+    await fetch("/home", {
+        method: "POST"
+    })
+}
+
+async function moveAbsolute() {
+
+    const target = document.getElementById("target").value
+
+    const form = new FormData()
+    form.append("target", target)
+
+    await fetch("/move_absolute", {
+        method: "POST",
+        body: form
+    })
+}
+
+async function nextIndex() {
+
+    await fetch("/next_index", {
+        method: "POST"
+    })
+}
+
+async function runPreset() {
+
+    const preset = document.getElementById("preset").value
+
+    const form = new FormData()
+    form.append("preset", preset)
+
+    await fetch("/run_preset", {
+        method: "POST",
+        body: form
+    })
+}
+
+async function updateStatus() {
+
+    const response = await fetch("/status")
+    const data = await response.json()
+
+    document.getElementById("statusText").innerText = data.status
+}
+
+setInterval(updateStatus, 1000)
+
+</script>
+
+</body>
+</html>
