@@ -13,7 +13,7 @@ float microstep = 0.0025;
 int check_home = 0;
 int check_home_R = 0;
 long step_index = 0;
-int rotation_speed = 256;
+int rotation_speed = 100;
 int H_speed = 256;
 float pulse_to_mm = pitch_mm * microstep;
 float pulse_to_deg = 360.0 / (400 * 10 * 1.3); // considering gear and pulley reductor
@@ -33,8 +33,8 @@ void init_klara()
   stepper_H.setAcceleration(800);
   stepper_H.setCurrentPosition(0);
   stepper_R.setEnablePin(EN_R_PIN);
-  stepper_R.setMaxSpeed(800);
-  stepper_R.setAcceleration(800);
+  stepper_R.setMaxSpeed(400);
+  stepper_R.setAcceleration(100);
   stepper_R.setCurrentPosition(0);
   encoder_R.write(0); // Reset encoder count to 0
   stepper_P.setMaxSpeed(800);
@@ -90,7 +90,7 @@ void homeStepper_H()
   // Serial.println("Starting homing sequence...");
   stepper_H.setSpeed(-256);
   check_home = 0;
-  while (check_home < 200)
+  while (check_home < 50)
   {
     stepper_H.runSpeed();
     if (digitalRead(LIMIT_H_PIN1) == LOW)
@@ -105,9 +105,9 @@ void homeStepper_H()
 
 void homeStepper_R()
 {
-  stepper_R.setSpeed(-256);
+  stepper_R.setSpeed(-50);
   check_home_R = 0;
-  while (check_home_R < 200)
+  while (check_home_R < 20)
   {
     stepper_R.runSpeed();
     if (digitalRead(LIMIT_INDEX) == LOW)
@@ -142,7 +142,7 @@ void rotate_next_index()
 {
   // Function to rotate to the next index position
   stepper_R.setSpeed(rotation_speed);
-  step_index += 1309; // Move to the next index
+  step_index += 1091; // Move to the next index
   stepper_R.moveTo(step_index);
   while (stepper_R.distanceToGo() != 0)
   {

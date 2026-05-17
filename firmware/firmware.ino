@@ -41,10 +41,10 @@ void loop()
     if (inputString.substring(0, 6) == "Homing")
     {
       homeStepper_H();
-      if (check_clearence())
-      {
+      //if (check_clearence())
+      //{
         homeStepper_R();
-      }
+      //}
     }
     if (inputString.substring(0, 9) == "Moveto_mm")
     {
@@ -56,11 +56,11 @@ void loop()
 
     if (inputString.substring(0, 10) == "Next_index")
     {
-      if (check_clearence())
-      {
+      //if (check_clearence())
+      //{
         rotate_next_index();
         // Serial.println(stepper_R.currentPosition());
-      }
+     // }
     }
 
     if (inputString.substring(0, 3) == "DIS")
